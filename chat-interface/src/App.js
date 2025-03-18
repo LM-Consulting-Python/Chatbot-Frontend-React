@@ -14,15 +14,7 @@ function App() {
         {/* Mensagem do assistente */}
         <div className="message bot">
           <div className="message-content">
-            Estou aqui para te ajudar no que precisar - desde responder suas
-            perguntas até oferecer as melhores recomendações. Vamos começar? 😊
-          </div>
-        </div>
-
-        {/* Mensagem do usuário */}
-        <div className="message user">
-          <div className="message-content">
-            Me mostre o histórico médico da paciente
+            Estou aqui para te ajudar no que precisar. Vamos começar? 😊
           </div>
         </div>
       </div>
