@@ -1,0 +1,50 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1440 800">
+  <defs>
+    <linearGradient id="redGradient" x1="0%" y1="0%" x2="100%" y2="0%">
+      <stop offset="0%" stop-color="#c92d2d" stop-opacity="0.4" />
+      <stop offset="100%" stop-color="#c92d2d" stop-opacity="0.1" />
+    </linearGradient>
+    <linearGradient id="blueGradient" x1="0%" y1="0%" x2="100%" y2="0%">
+      <stop offset="0%" stop-color="#2c3e8c" stop-opacity="0.4" />
+      <stop offset="100%" stop-color="#2c3e8c" stop-opacity="0.1" />
+    </linearGradient>
+  </defs>
+  
+  <!-- Red waves -->
+  <path d="M0,160 C320,100,420,300,640,300 C860,300,960,100,1280,160 L1280,0 L0,0 Z" fill="url(#redGradient)" transform="rotate(180 640 150)">
+    <animate attributeName="d" 
+      values="
+        M0,160 C320,100,420,300,640,300 C860,300,960,100,1280,160 L1280,0 L0,0 Z;
+        M0,160 C320,220,420,180,640,180 C860,180,960,220,1280,160 L1280,0 L0,0 Z;
+        M0,160 C320,100,420,300,640,300 C860,300,960,100,1280,160 L1280,0 L0,0 Z"
+      dur="20s" repeatCount="indefinite" />
+  </path>
+  
+  <path d="M0,160 C320,100,420,300,640,300 C860,300,960,100,1280,160 L1280,0 L0,0 Z" fill="url(#redGradient)" opacity="0.7" transform="translate(0, 100) rotate(180 640 150)">
+    <animate attributeName="d" 
+      values="
+        M0,160 C320,100,420,300,640,300 C860,300,960,100,1280,160 L1280,0 L0,0 Z;
+        M0,160 C320,220,420,180,640,180 C860,180,960,220,1280,160 L1280,0 L0,0 Z;
+        M0,160 C320,100,420,300,640,300 C860,300,960,100,1280,160 L1280,0 L0,0 Z"
+      dur="15s" repeatCount="indefinite" />
+  </path>
+
+  <!-- Blue waves -->
+  <path d="M0,160 C320,100,420,300,640,300 C860,300,960,100,1280,160 L1280,0 L0,0 Z" fill="url(#blueGradient)" transform="translate(0, 300)">
+    <animate attributeName="d" 
+      values="
+        M0,160 C320,100,420,300,640,300 C860,300,960,100,1280,160 L1280,0 L0,0 Z;
+        M0,160 C320,220,420,180,640,180 C860,180,960,220,1280,160 L1280,0 L0,0 Z;
+        M0,160 C320,100,420,300,640,300 C860,300,960,100,1280,160 L1280,0 L0,0 Z"
+      dur="25s" repeatCount="indefinite" />
+  </path>
+  
+  <path d="M0,160 C320,100,420,300,640,300 C860,300,960,100,1280,160 L1280,0 L0,0 Z" fill="url(#blueGradient)" opacity="0.6" transform="translate(0, 400)">
+    <animate attributeName="d" 
+      values="
+        M0,160 C320,100,420,300,640,300 C860,300,960,100,1280,160 L1280,0 L0,0 Z;
+        M0,160 C320,220,420,180,640,180 C860,180,960,220,1280,160 L1280,0 L0,0 Z;
+        M0,160 C320,100,420,300,640,300 C860,300,960,100,1280,160 L1280,0 L0,0 Z"
+      dur="18s" repeatCount="indefinite" />
+  </path>
+</svg>
