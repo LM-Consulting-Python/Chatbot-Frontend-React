@@ -73,7 +73,6 @@ const App = () => {
       <div className="chat-container">
         <header className="header">
           <h1>Assistente Virtual</h1>
-          <p>Oli Precisa de ajuda?</p>
         </header>
 
         <div className="chat-window">
