@@ -1,42 +1,3 @@
-.App {
-  text-align: center;
-}
-
-.App-logo {
-  height: 40vmin;
-  pointer-events: none;
-}
-
-@media (prefers-reduced-motion: no-preference) {
-  .App-logo {
-    animation: App-logo-spin infinite 20s linear;
-  }
-}
-
-.App-header {
-  background-color: #282c34;
-  min-height: 100vh;
-  display: flex;
-  flex-direction: column;
-  align-items: center;
-  justify-content: center;
-  font-size: calc(10px + 2vmin);
-  color: white;
-}
-
-.App-link {
-  color: #61dafb;
-}
-
-@keyframes App-logo-spin {
-  from {
-    transform: rotate(0deg);
-  }
-  to {
-    transform: rotate(360deg);
-  }
-}
-
 .app {
   display: flex;
   justify-content: center;
@@ -47,8 +8,8 @@
 
 .chat-container {
   width: 100%;
-  max-width: 600px; /* Largura reduzida */
-  height: 90vh; /* Altura relativa à tela */
+  max-width: 600px;
+  height: 90vh;
   display: flex;
   flex-direction: column;
   background-color: white;
@@ -62,6 +23,7 @@
   background-color: #007bff;
   color: white;
   margin-bottom: 0;
+  text-align: center;
 }
 
 .header h1 {
@@ -81,34 +43,73 @@
   overflow-y: auto;
   display: flex;
   flex-direction: column;
-  gap: 10px; /* Espaço reduzido entre mensagens */
+  gap: 10px;
 }
 
 .message {
   max-width: 85%;
-  margin: 5px 0; /* Margem reduzida */
+  margin: 5px 0;
+  display: flex;
+}
+
+.message.bot {
+  align-self: flex-start;
+}
+
+.message.user {
+  align-self: flex-end;
 }
 
 .message-content {
-  padding: 8px 12px; /* Padding reduzido */
+  padding: 8px 12px;
   font-size: 0.9rem;
+  position: relative;
+}
+
+.message.bot .message-content {
+  background-color: #e0e0e0;
+  border-radius: 20px 20px 20px 5px;
+}
+
+.message.user .message-content {
+  background-color: #007bff;
+  color: white;
+  border-radius: 20px 20px 5px 20px;
 }
 
 .message-time {
   font-size: 0.65rem;
+  opacity: 0.8;
+  margin-top: 4px;
 }
 
 .input-area {
   padding: 10px 15px;
   background-color: #f8f9fa;
   border-top: 1px solid #eee;
+  display: flex;
+  gap: 10px;
 }
 
 .input-area input {
+  flex: 1;
   padding: 8px 12px;
+  border: 1px solid #ddd;
+  border-radius: 25px;
+  outline: none;
   font-size: 0.9rem;
 }
 
 .input-area button {
   padding: 8px 16px;
+  background-color: #007bff;
+  color: white;
+  border: none;
+  border-radius: 25px;
+  cursor: pointer;
+  transition: background-color 0.3s;
+}
+
+.input-area button:hover {
+  background-color: #0056b3;
 }
