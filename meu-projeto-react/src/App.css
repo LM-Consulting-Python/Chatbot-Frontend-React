@@ -1,42 +1,238 @@
-#root {
-  max-width: 1280px;
-  margin: 0 auto;
-  padding: 2rem;
-  text-align: center;
+@import url("https://fonts.googleapis.com/css2?family=Roboto:wght@300;400;500;700&display=swap");
+
+:root {
+  --primary-dark: #101c3d;
+  --text-light: #ffffff;
+  --accent-blue: #2c3e8c;
+  --accent-red: #c92d2d;
+}
+
+* {
+  margin: 0;
+  padding: 0;
+  box-sizing: border-box;
+  font-family: "Roboto", sans-serif;
+}
+
+body,
+html {
+  height: 100%;
+  width: 100%;
+  overflow: hidden;
+}
+
+.app-container {
+  position: relative;
+  width: 100vw;
+  height: 100vh;
+  background-color: var(--primary-dark);
+  color: var(--text-light);
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  overflow: hidden;
+}
+
+.background-waves {
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  background: linear-gradient(
+    135deg,
+    rgba(44, 62, 140, 0.3),
+    rgba(201, 45, 45, 0.3)
+  );
+  z-index: 0;
+  overflow: hidden;
+}
+
+.background-waves::before {
+  content: "";
+  position: absolute;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  background: url("./assets/wave-pattern.svg") no-repeat center center;
+  background-size: cover;
+  opacity: 0.4;
+  z-index: -1;
+}
+
+.content-container {
+  position: relative;
+  z-index: 1;
+  display: flex;
+  width: 90%;
+  max-width: 1200px;
+  height: 80%;
+  background-color: rgba(16, 28, 61, 0.7);
+  backdrop-filter: blur(10px);
+  border-radius: 20px;
+  overflow: hidden;
+  box-shadow: 0 10px 30px rgba(0, 0, 0, 0.5);
+}
+
+.left-panel,
+.right-panel {
+  padding: 40px;
+  display: flex;
+  flex-direction: column;
+}
+
+.left-panel {
+  flex: 1;
+  background-color: rgba(16, 28, 61, 0.8);
+  border-right: 1px solid rgba(255, 255, 255, 0.1);
+  justify-content: space-between;
+  align-items: center;
+}
+
+.right-panel {
+  flex: 1;
+  justify-content: center;
+}
+
+.logo-container {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  margin-bottom: 30px;
 }
 
 .logo {
-  height: 6em;
-  padding: 1.5em;
-  will-change: filter;
-  transition: filter 300ms;
-}
-.logo:hover {
-  filter: drop-shadow(0 0 2em #646cffaa);
-}
-.logo.react:hover {
-  filter: drop-shadow(0 0 2em #61dafbaa);
+  width: 60px;
+  height: 60px;
+  margin-bottom: 10px;
 }
 
-@keyframes logo-spin {
-  from {
-    transform: rotate(0deg);
+.logo-text {
+  font-size: 24px;
+  font-weight: 700;
+  color: var(--text-light);
+}
+
+.logo-subtitle {
+  font-size: 12px;
+  color: rgba(255, 255, 255, 0.7);
+}
+
+.access-section {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  text-align: center;
+  width: 100%;
+}
+
+.access-section h1 {
+  font-size: 28px;
+  font-weight: 500;
+  margin-bottom: 15px;
+}
+
+.access-section p {
+  font-size: 16px;
+  color: rgba(255, 255, 255, 0.8);
+  margin-bottom: 30px;
+  max-width: 300px;
+}
+
+.qr-container {
+  width: 100%;
+  display: flex;
+  justify-content: center;
+  margin: 20px 0;
+}
+
+.qr-frame {
+  position: relative;
+  width: 200px;
+  height: 200px;
+  background: white;
+  padding: 5px;
+  border-radius: 10px;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
+
+.qr-frame::before {
+  content: "";
+  position: absolute;
+  top: -20px;
+  left: -20px;
+  right: -20px;
+  bottom: -20px;
+  border: 2px solid rgba(255, 255, 255, 0.3);
+  border-radius: 15px;
+  pointer-events: none;
+}
+
+.qr-code {
+  width: 100%;
+  height: 100%;
+  object-fit: contain;
+}
+
+.scan-instructions {
+  font-size: 14px;
+  color: rgba(255, 255, 255, 0.7);
+  margin-top: 30px;
+}
+
+.instructions-container {
+  max-width: 500px;
+}
+
+.instructions-container h2 {
+  font-size: 32px;
+  font-weight: 500;
+  margin-bottom: 40px;
+  line-height: 1.2;
+}
+
+.connection-steps {
+  list-style-type: none;
+}
+
+.connection-steps li {
+  margin-bottom: 25px;
+  font-size: 16px;
+  display: flex;
+  align-items: flex-start;
+}
+
+.step-number {
+  font-weight: 500;
+  margin-right: 10px;
+  color: rgba(255, 255, 255, 0.9);
+}
+
+.connection-steps strong {
+  color: var(--text-light);
+}
+
+@media (max-width: 900px) {
+  .content-container {
+    flex-direction: column;
+    height: auto;
+    max-height: 90vh;
+    overflow-y: auto;
   }
-  to {
-    transform: rotate(360deg);
+
+  .left-panel,
+  .right-panel {
+    padding: 20px;
   }
-}
 
-@media (prefers-reduced-motion: no-preference) {
-  a:nth-of-type(2) .logo {
-    animation: logo-spin infinite 20s linear;
+  .access-section h1 {
+    font-size: 24px;
   }
-}
 
-.card {
-  padding: 2em;
-}
-
-.read-the-docs {
-  color: #888;
+  .instructions-container h2 {
+    font-size: 28px;
+  }
 }
