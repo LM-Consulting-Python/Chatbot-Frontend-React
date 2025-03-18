@@ -1,4 +1,3 @@
-// src/App.js
 import React, { useState, useEffect, useRef } from "react";
 import Message from "./components/Message";
 import ChatInput from "./components/ChatInput";
