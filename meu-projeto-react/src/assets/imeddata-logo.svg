@@ -1,35 +1,38 @@
-<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 100 100">
+<svg xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" width="54" height="54" viewBox="0 0 54 54">
   <defs>
-    <linearGradient id="logoGradient" x1="0%" y1="0%" x2="100%" y2="100%">
-      <stop offset="0%" stop-color="#2c3e8c" />
-      <stop offset="100%" stop-color="#c92d2d" />
-    </linearGradient>
+    <filter id="Elipse_1" x="0" y="0" width="54" height="54" filterUnits="userSpaceOnUse">
+      <feOffset dy="3" input="SourceAlpha"/>
+      <feGaussianBlur stdDeviation="3" result="blur"/>
+      <feFlood flood-opacity="0.161"/>
+      <feComposite operator="in" in2="blur"/>
+      <feComposite in="SourceGraphic"/>
+    </filter>
+    <clipPath id="clip-path">
+      <rect id="Retângulo_13" data-name="Retângulo 13" width="26.821" height="27.282" fill="none"/>
+    </clipPath>
   </defs>
-  
-  <!-- Círculo exterior -->
-  <circle cx="50" cy="50" r="45" fill="none" stroke="url(#logoGradient)" stroke-width="2" />
-  
-  <!-- Ondas de dados (representação de dados médicos) -->
-  <path d="M20,50 Q30,30 40,50 Q50,70 60,50 Q70,30 80,50" 
-        fill="none" 
-        stroke="url(#logoGradient)" 
-        stroke-width="3" 
-        stroke-linecap="round" />
-  
-  <path d="M20,60 Q30,40 40,60 Q50,80 60,60 Q70,40 80,60" 
-        fill="none" 
-        stroke="url(#logoGradient)" 
-        stroke-width="2" 
-        stroke-linecap="round" 
-        opacity="0.7" />
-        
-  <path d="M20,40 Q30,20 40,40 Q50,60 60,40 Q70,20 80,40" 
-        fill="none" 
-        stroke="url(#logoGradient)" 
-        stroke-width="2" 
-        stroke-linecap="round" 
-        opacity="0.7" />
-  
-  <!-- Símbolo de saúde/médico (cruz estilizada) -->
-  <circle cx="50" cy="50" r="10" fill="url(#logoGradient)" opacity="0.9" />
+  <g id="Chat_avatar" transform="translate(9 6)">
+    <g transform="matrix(1, 0, 0, 1, -9, -6)" filter="url(#Elipse_1)">
+      <circle id="Elipse_1-2" data-name="Elipse 1" cx="18" cy="18" r="18" transform="translate(9 6)" fill="#fff"/>
+    </g>
+    <g id="Grupo_17" data-name="Grupo 17" transform="translate(4.55 4.55)">
+      <g id="Grupo_14" data-name="Grupo 14" transform="translate(0 0)">
+        <g id="Grupo_13" data-name="Grupo 13" clip-path="url(#clip-path)">
+          <path id="Caminho_1" data-name="Caminho 1" d="M27.471,5.074l4.158,4.178-1.322,1.316L26.149,6.39Z" transform="translate(-18.018 -3.496)"/>
+          <path id="Caminho_2" data-name="Caminho 2" d="M26.208,4.19a.93.93,0,0,1,.661.275l4.158,4.178A.933.933,0,0,1,29.7,9.958L25.547,5.781a.933.933,0,0,1,.661-1.591Z" transform="translate(-17.416 -2.887)" fill="#bc8a69"/>
+        </g>
+      </g>
+      <path id="Caminho_3" data-name="Caminho 3" d="M14.133,11.9l8.038,8.038-1.319,1.319-8.038-8.038Z" transform="translate(-8.83 -8.199)"/>
+      <path id="Caminho_4" data-name="Caminho 4" d="M12.868,11.02a.93.93,0,0,1,.66.273l8.038,8.038a.933.933,0,0,1-1.319,1.319l-8.038-8.038a.933.933,0,0,1,.66-1.592Z" transform="translate(-8.224 -7.594)" fill="#bba064"/>
+      <g id="Grupo_16" data-name="Grupo 16" transform="translate(0 0)">
+        <g id="Grupo_15" data-name="Grupo 15" clip-path="url(#clip-path)">
+          <path id="Caminho_5" data-name="Caminho 5" d="M17.55,34.754a6.558,6.558,0,0,1-3.091-.8c-1.792-.961-8.34-8.114-9.081-8.927A.933.933,0,0,1,6.757,23.77C9.472,26.748,14.2,31.7,15.341,32.31a3.945,3.945,0,0,0,4.693-.4A3.166,3.166,0,0,0,21.1,29.606c-.012-1.223-.785-2.585-2.3-4.047l.574-.742.653-.666c1.955,1.89,2.92,3.7,2.936,5.438a5,5,0,0,1-1.6,3.639A5.311,5.311,0,0,1,17.55,34.754Z" transform="translate(-3.538 -16.17)" fill="#bc8a69"/>
+          <path id="Caminho_6" data-name="Caminho 6" d="M11.025,48.9a.929.929,0,0,1-.375-.079,18.9,18.9,0,0,1-3.307-1.912A83.1,83.1,0,0,1,.575,40.128l-.324-.348a.933.933,0,0,1,1.363-1.273l.327.351c1.269,1.364,5.13,5.513,6.526,6.568A17.256,17.256,0,0,0,11.4,47.118a.933.933,0,0,1-.376,1.787Z" transform="translate(0 -26.33)" fill="#cf6a49"/>
+          <path id="Caminho_7" data-name="Caminho 7" d="M14.339,67.248h0c-7.955,0-12.955-7.485-13.164-7.8A.933.933,0,0,1,2.732,58.42c.046.07,4.669,6.961,11.6,6.963h0c6.518,0,9.712-6.566,9.743-6.632a.933.933,0,1,1,1.685.8C25.618,59.866,22.022,67.248,14.339,67.248Z" transform="translate(-0.703 -39.967)" fill="#a14c40"/>
+          <path id="Caminho_8" data-name="Caminho 8" d="M66.319,17.582A.934.934,0,0,1,65.4,16.5a12.849,12.849,0,0,0-.872-6.531c-1.431-3.119-5.268-5.98-5.306-6.009a.933.933,0,1,1,1.109-1.5c.173.128,4.263,3.179,5.893,6.731A14.555,14.555,0,0,1,67.238,16.8.932.932,0,0,1,66.319,17.582Z" transform="translate(-40.545 -1.57)" fill="#a14c40"/>
+          <path id="Caminho_9" data-name="Caminho 9" d="M42.118,22.677a.933.933,0,0,1-.267-1.827c4.436-1.325,5.513-3.9,5.981-6.235a8.179,8.179,0,0,0-1-5.729c-1-1.671-5.649-5.794-7.357-7.242A.933.933,0,1,1,40.684.221c.653.553,6.415,5.47,7.752,7.708a10.067,10.067,0,0,1,1.225,7.052c-.543,2.715-1.861,6.039-7.276,7.657A.933.933,0,0,1,42.118,22.677Z" transform="translate(-26.976 0)" fill="#cf6a49"/>
+        </g>
+      </g>
+    </g>
+  </g>
 </svg>
