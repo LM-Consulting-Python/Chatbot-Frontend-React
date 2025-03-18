@@ -59,34 +59,45 @@
   border-radius: 10px;
   padding: 20px;
   margin-bottom: 20px;
+  display: flex;
+  flex-direction: column;
+  gap: 15px;
 }
 
 .message {
-  margin: 10px 0;
   display: flex;
+  max-width: 80%;
 }
 
 .message.bot {
-  justify-content: flex-start;
+  align-self: flex-start;
 }
 
 .message.user {
-  justify-content: flex-end;
+  align-self: flex-end;
 }
 
 .message-content {
-  max-width: 70%;
-  padding: 10px 15px;
-  border-radius: 15px;
+  padding: 12px 18px;
+  border-radius: 20px;
+  position: relative;
 }
 
 .message.bot .message-content {
   background-color: #e0e0e0;
+  border-radius: 20px 20px 20px 5px;
 }
 
 .message.user .message-content {
   background-color: #007bff;
   color: white;
+  border-radius: 20px 20px 5px 20px;
+}
+
+.message-time {
+  font-size: 0.75rem;
+  opacity: 0.8;
+  margin-top: 4px;
 }
 
 .input-area {
@@ -99,16 +110,22 @@
 
 .input-area input {
   flex: 1;
-  padding: 10px;
+  padding: 12px;
   border: 1px solid #ddd;
-  border-radius: 5px;
+  border-radius: 25px;
+  outline: none;
 }
 
 .input-area button {
-  padding: 10px 20px;
+  padding: 12px 25px;
   background-color: #007bff;
   color: white;
   border: none;
-  border-radius: 5px;
+  border-radius: 25px;
   cursor: pointer;
+  transition: background-color 0.3s;
+}
+
+.input-area button:hover {
+  background-color: #0056b3;
 }
