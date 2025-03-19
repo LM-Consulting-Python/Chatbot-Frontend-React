@@ -4,6 +4,11 @@ import imedDataLogo from "./assets/imeddata-logo.svg"; // Você precisará criar
 import qrCodeImage from "./assets/qrcode.png"; // Substitua pelo QR code real ou use uma biblioteca
 
 function App() {
+  const navigateToChat = () => {
+    // Navigate to chat page
+    window.location.href = "/chat"; // You can change this to the actual chat page path
+  };
+
   return (
     <div className="app-container">
       <div className="background-waves"></div>
@@ -29,6 +34,10 @@ function App() {
               Escanei esse código com o seu celular
               <br />e acesse o assistente virtual do paciente
             </p>
+
+            <button className="chat-button" onClick={navigateToChat}>
+              Acessar Chat Agora
+            </button>
           </div>
         </div>
 
