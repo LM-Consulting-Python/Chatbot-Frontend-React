@@ -236,3 +236,30 @@ html {
     font-size: 28px;
   }
 }
+
+.chat-button {
+  margin-top: 20px;
+  padding: 14px 28px;
+  background-color: #0066cc; /* You can adjust this color to match your brand */
+  color: white;
+  border: none;
+  border-radius: 8px;
+  font-size: 16px;
+  font-weight: 600;
+  cursor: pointer;
+  transition: background-color 0.3s ease, transform 0.2s ease;
+  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+  width: 80%;
+  max-width: 300px;
+}
+
+.chat-button:hover {
+  background-color: #0055aa;
+  transform: translateY(-2px);
+  box-shadow: 0 6px 12px rgba(0, 0, 0, 0.15);
+}
+
+.chat-button:active {
+  transform: translateY(0);
+  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+}
