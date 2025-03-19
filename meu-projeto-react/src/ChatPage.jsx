@@ -1,7 +1,7 @@
 import React, { useState, useRef, useEffect } from "react";
 import "./ChatPage.css";
-import logoIcon from "./assets/imeddata-logo.svg"; // Substitua pelo caminho real do seu logo
-import SendIcon from "./SendIcon"; // Importando o componente do ícone de envio
+import logoIcon from "./assets/imeddata-logo.svg";
+import SendIcon from "./SendIcon";
 
 function ChatPage() {
   const [message, setMessage] = useState("");
@@ -26,7 +26,6 @@ function ChatPage() {
     e.preventDefault();
     if (message.trim() === "") return;
 
-    // Adicionar mensagem do usuário
     const newMessage = {
       id: Date.now(),
       sender: "user",
@@ -37,7 +36,6 @@ function ChatPage() {
     setMessage("");
     setCharCount(0);
 
-    // Simulação de resposta do assistente (pode ser substituído por uma chamada de API real)
     setTimeout(() => {
       const assistantResponse = {
         id: Date.now() + 1,
@@ -50,7 +48,6 @@ function ChatPage() {
     }, 1000);
   };
 
-  // Rolar para o final quando novas mensagens são adicionadas
   useEffect(() => {
     if (chatContentRef.current) {
       chatContentRef.current.scrollTop = chatContentRef.current.scrollHeight;
@@ -101,6 +98,7 @@ function ChatPage() {
                 onChange={handleMessageChange}
                 placeholder="Pergunte o que quiser..."
                 className="chat-input"
+                maxLength={1000}
               />
               <div className="input-actions">
                 <span className="char-count">{charCount}/1000</span>

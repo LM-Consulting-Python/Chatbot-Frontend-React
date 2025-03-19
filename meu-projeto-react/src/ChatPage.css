@@ -1,19 +1,27 @@
+* {
+  margin: 0;
+  padding: 0;
+  box-sizing: border-box;
+}
+
+html,
+body,
+#root {
+  height: 100%;
+  width: 100%;
+}
+
 .chat-page {
   width: 100%;
   height: 100vh;
   display: flex;
-  justify-content: center;
-  align-items: center;
   background: linear-gradient(135deg, #e0e8ff 0%, #ffe0e8 100%);
 }
 
 .chat-container {
   width: 100%;
-  max-width: 1000px;
   height: 100%;
   background-color: white;
-  border-radius: 20px;
-  box-shadow: 0 8px 30px rgba(0, 0, 0, 0.05);
   display: flex;
   flex-direction: column;
   overflow: hidden;
@@ -25,6 +33,7 @@
   align-items: center;
   border-bottom: 1px solid #f0f0f0;
   background-color: white;
+  flex-shrink: 0;
 }
 
 .logo-small {
@@ -50,6 +59,7 @@
   flex: 1;
   padding: 20px;
   overflow-y: auto;
+  min-height: 0; /* Corrige overflow no Firefox */
 }
 
 .message {
@@ -123,6 +133,7 @@
   padding: 15px 20px;
   border-top: 1px solid #f0f0f0;
   background-color: white;
+  flex-shrink: 0;
 }
 
 .input-wrapper {
@@ -182,10 +193,8 @@
   height: 20px;
 }
 
-/* Adicione estilos responsivos */
 @media (max-width: 768px) {
   .chat-container {
     border-radius: 0;
-    height: 100vh;
   }
 }
