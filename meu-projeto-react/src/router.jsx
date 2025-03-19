@@ -1,13 +1,13 @@
 import React from "react";
 import { BrowserRouter, Routes, Route } from "react-router-dom";
-import App from "./App"; // Ajuste o caminho de acordo com sua estrutura de pastas
-import ChatPage from "./ChatPage"; // Crie esta página ou ajuste o caminho conforme necessário
+import HomePage from "./HomePage"; // Import HomePage instead of App
+import ChatPage from "./ChatPage";
 
 function App() {
   return (
     <BrowserRouter>
       <Routes>
-        <Route path="/" element={<App />} />
+        <Route path="/" element={<HomePage />} />
         <Route path="/chat" element={<ChatPage />} />
         {/* Adicione outras rotas aqui conforme necessário */}
       </Routes>
