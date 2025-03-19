@@ -6,6 +6,16 @@ import SendIcon from "./SendIcon"; // Importando o componente do ícone de envio
 function ChatPage() {
   const [message, setMessage] = useState("");
   const [charCount, setCharCount] = useState(0);
+  const [messages, setMessages] = useState([
+    {
+      id: 1,
+      sender: "assistant",
+      content: "Oi! Precisa de ajuda?",
+      subtext:
+        "Estou aqui para te ajudar no que precisar – desde responder suas perguntas até oferecer as melhores recomendações. Vamos começar? 😊",
+    },
+  ]);
+  const chatContentRef = useRef(null);
 
   const handleMessageChange = (e) => {
     setMessage(e.target.value);
@@ -14,11 +24,38 @@ function ChatPage() {
 
   const handleSendMessage = (e) => {
     e.preventDefault();
-    // Adicione aqui a lógica para enviar a mensagem
-    console.log("Mensagem enviada:", message);
+    if (message.trim() === "") return;
+
+    // Adicionar mensagem do usuário
+    const newMessage = {
+      id: Date.now(),
+      sender: "user",
+      content: message,
+    };
+
+    setMessages([...messages, newMessage]);
     setMessage("");
     setCharCount(0);
+
+    // Simulação de resposta do assistente (pode ser substituído por uma chamada de API real)
+    setTimeout(() => {
+      const assistantResponse = {
+        id: Date.now() + 1,
+        sender: "assistant",
+        content: "Entendi sua mensagem",
+        subtext:
+          "Estou processando sua solicitação e retornarei em breve com mais informações.",
+      };
+      setMessages((prevMessages) => [...prevMessages, assistantResponse]);
+    }, 1000);
   };
+
+  // Rolar para o final quando novas mensagens são adicionadas
+  useEffect(() => {
+    if (chatContentRef.current) {
+      chatContentRef.current.scrollTop = chatContentRef.current.scrollHeight;
+    }
+  }, [messages]);
 
   return (
     <div className="chat-page">
