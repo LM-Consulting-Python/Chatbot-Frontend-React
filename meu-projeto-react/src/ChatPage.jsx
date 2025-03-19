@@ -67,20 +67,29 @@ function ChatPage() {
           <h1>Assistente Virtual</h1>
         </div>
 
-        <div className="chat-content">
-          <div className="welcome-message">
-            <div className="avatar-container">
-              <img src={logoIcon} alt="Avatar" className="avatar" />
+        <div className="chat-content" ref={chatContentRef}>
+          {messages.map((msg) => (
+            <div
+              key={msg.id}
+              className={`message ${
+                msg.sender === "user" ? "user-message" : "assistant-message"
+              }`}
+            >
+              {msg.sender === "assistant" && (
+                <div className="avatar-container">
+                  <img src={logoIcon} alt="Avatar" className="avatar" />
+                </div>
+              )}
+              <div
+                className={`message-content ${
+                  msg.sender === "user" ? "user-content" : ""
+                }`}
+              >
+                <h2>{msg.content}</h2>
+                {msg.subtext && <p>{msg.subtext}</p>}
+              </div>
             </div>
-            <div className="message-content">
-              <h2>Oi! Precisa de ajuda?</h2>
-              <p>
-                Estou aqui para te ajudar no que precisar – desde responder suas
-                perguntas até oferecer as melhores recomendações. Vamos começar?
-                😊
-              </p>
-            </div>
-          </div>
+          ))}
         </div>
 
         <div className="chat-input-container">
