@@ -110,6 +110,15 @@
   color: #666;
 }
 
+.user-content h2 {
+  color: white;
+  margin: 0;
+}
+
+.user-content p {
+  color: rgba(255, 255, 255, 0.8);
+}
+
 .chat-input-container {
   padding: 15px 20px;
   border-top: 1px solid #f0f0f0;
