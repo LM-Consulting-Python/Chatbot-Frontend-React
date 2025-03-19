@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useState, useRef, useEffect } from "react";
 import "./ChatPage.css";
 import logoIcon from "./assets/imeddata-logo.svg"; // Substitua pelo caminho real do seu logo
 import SendIcon from "./SendIcon"; // Importando o componente do ícone de envio
