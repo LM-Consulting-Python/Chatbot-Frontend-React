@@ -1,4 +1,5 @@
 import React from "react";
+import { useNavigate } from "react-router-dom"; // Add this import
 import "./App.css"; // Mantenha os estilos existentes
 import imedDataLogo from "./assets/imeddata-logo.svg";
 import qrCodeImage from "./assets/qrcode.png";
