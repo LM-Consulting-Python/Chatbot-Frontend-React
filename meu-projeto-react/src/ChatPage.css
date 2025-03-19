@@ -52,10 +52,19 @@
   overflow-y: auto;
 }
 
-.welcome-message {
+.message {
   display: flex;
   margin-bottom: 20px;
   max-width: 90%;
+}
+
+.assistant-message {
+  align-items: flex-start;
+}
+
+.user-message {
+  flex-direction: row-reverse;
+  margin-left: auto;
 }
 
 .avatar-container {
