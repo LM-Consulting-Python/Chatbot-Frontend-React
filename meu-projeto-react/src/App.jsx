@@ -1,12 +1,13 @@
 import React from "react";
-import "./App.css";
-import imedDataLogo from "./assets/imeddata-logo.svg"; // Você precisará criar/importar este logo
-import qrCodeImage from "./assets/qrcode.png"; // Substitua pelo QR code real ou use uma biblioteca
+import "./App.css"; // Mantenha os estilos existentes
+import imedDataLogo from "./assets/imeddata-logo.svg";
+import qrCodeImage from "./assets/qrcode.png";
 
-function App() {
+function HomePage() {
+  const navigate = useNavigate();
+
   const navigateToChat = () => {
-    // Navigate to chat page
-    window.location.href = "/chat"; // You can change this to the actual chat page path
+    navigate("/chat");
   };
 
   return (
@@ -71,4 +72,4 @@ function App() {
   );
 }
 
-export default App;
+export default HomePage;
