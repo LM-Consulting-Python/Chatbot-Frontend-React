@@ -47,7 +47,7 @@ html {
   ); /* Fundo mais claro para contraste */
   backdrop-filter: blur(10px);
   border-radius: 20px;
-  overflow: hidden;
+  overflow: auto;
   box-shadow: 0 10px 30px rgba(0, 0, 0, 0.5);
   margin: auto;
 }
@@ -197,12 +197,22 @@ html {
   font-size: 16px;
   display: flex;
   align-items: flex-start;
+  flex-wrap: wrap; /* Add this */
+  line-height: 1.5; /* Add this for better text spacing */
+  word-break: normal;
+  overflow-wrap: break-word;
+}
+
+.connection-steps li span:not(.step-number) {
+  flex: 1;
+  min-width: 0; /* Add this to allow proper text wrapping */
 }
 
 .step-number {
   font-weight: 500;
   margin-right: 10px;
   color: rgba(255, 255, 255, 0.9);
+  flex-shrink: 0; /* Add this to prevent the number from shrinking */
 }
 
 .connection-steps strong {
