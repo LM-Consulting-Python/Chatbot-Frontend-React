@@ -129,6 +129,7 @@ function HomePage() {
 
   return (
     <div className="app-container">
+      <div className="background-image"></div>
       <div id="particles-js"></div>
       <div className="content-container">
         <div className="left-panel">
