@@ -258,7 +258,6 @@ html {
   top: 0;
   left: 0;
   z-index: 1;
-  background: #1a237e; /* Cor de fundo opcional */
 }
 
 .content-container {
