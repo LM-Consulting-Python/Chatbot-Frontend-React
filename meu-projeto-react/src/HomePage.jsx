@@ -3,7 +3,6 @@ import { useNavigate } from "react-router-dom";
 import "./App.css"; // Mantenha os estilos existentes
 import imedDataLogo from "./assets/imeddata-logo.svg";
 import qrCodeImage from "./assets/qrcode.png";
-import "../assets/js/particles.js";
 
 function HomePage() {
   const navigate = useNavigate();
@@ -131,7 +130,6 @@ function HomePage() {
   return (
     <div className="app-container">
       <div id="particles-js"></div>
-      <div className="background-waves"></div>
       <div className="content-container">
         <div className="left-panel">
           <div className="logo-container">
