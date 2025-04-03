@@ -19,6 +19,7 @@ body,
 }
 
 .chat-container {
+  flex: 1;
   width: 100%;
   height: 100%;
   display: flex;
@@ -29,13 +30,14 @@ body,
 }
 
 .chat-header {
-  padding: 20px;
+  padding: 15px 20px;
   display: flex;
   align-items: center;
   justify-content: space-between; /* Space between logo and user profile */
   border-bottom: 1px solid #f0f0f0;
   background-color: rgba(255, 255, 255, 0.8); /* Semi-transparent header */
   flex-shrink: 0;
+  height: 60px;
 }
 
 .logo-small {
@@ -343,6 +345,8 @@ body,
   width: 100%;
   padding: 10px 15px;
   border: 1px solid #e0e0e0;
+  background-color: #f9f9f9;
+  color: #000; /* Added explicitly black text color */
   border-radius: 8px;
   margin-top: 8px;
   outline: none;
@@ -369,4 +373,90 @@ body,
     flex-direction: column;
     align-items: center;
   }
+}
+
+/* Change to the part that controls the chat input text color */
+.chat-input {
+  flex: 1;
+  border: none;
+  padding: 12px 15px;
+  font-size: 14px;
+  background-color: transparent;
+  outline: none;
+  color: #000; /* Added explicitly black text color */
+}
+
+/* Also update the user message text color for consistency */
+.user-content p {
+  color: rgba(255, 255, 255, 0.8);
+}
+
+/* You may also want to ensure the placeholder text is visible */
+.chat-input::placeholder {
+  color: #999;
+}
+
+.chat-page {
+  display: flex;
+  height: 100vh;
+  overflow: hidden;
+}
+
+.filter-section {
+  margin-bottom: 20px;
+}
+
+.filtros-label {
+  display: block;
+  font-size: 14px;
+  color: #666;
+  margin-bottom: 8px;
+}
+
+.filtros-input,
+.filtros-select {
+  width: 100%;
+  padding: 10px;
+  border: 1px solid #ddd;
+  border-radius: 4px;
+  font-size: 14px;
+  margin-bottom: 10px;
+}
+
+.input-with-button .filtros-input {
+  flex: 1;
+}
+
+.filter-action-button {
+  background-color: #ff6b35;
+  color: white;
+  border: none;
+  border-radius: 4px;
+  padding: 8px 16px;
+  cursor: pointer;
+  font-weight: 600;
+  transition: background-color 0.3s;
+}
+
+.filter-action-button:hover {
+  background-color: #e55a2a;
+}
+
+.filter-action-button:disabled {
+  background-color: #ccc;
+  cursor: not-allowed;
+}
+
+.user-info-section {
+  background-color: #fff;
+  padding: 12px;
+  border-radius: 4px;
+  margin-bottom: 20px;
+  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+}
+
+.user-info-name {
+  font-weight: 600;
+  color: #333;
+  margin: 0;
 }
