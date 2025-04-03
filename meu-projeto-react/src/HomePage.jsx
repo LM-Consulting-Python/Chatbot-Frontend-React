@@ -163,7 +163,6 @@ function HomePage() {
         <div className="right-panel">
           <div className="instructions-container">
             <h2>Como conectar um dispositivo ao imedData</h2>
-
             <ol className="connection-steps">
               <li>
                 <span className="step-number">1 -</span> Abra o{" "}
