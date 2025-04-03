@@ -193,11 +193,6 @@ html {
     overflow-y: auto;
   }
 
-  .left-panel,
-  .right-panel {
-    padding: 20px;
-  }
-
   .access-section h1 {
     font-size: 24px;
   }
