@@ -1,21 +1,19 @@
 import React, { useState, useRef, useEffect } from "react";
 import "./ChatPage.css";
-import logoIcon from "./assets/imeddata-logo.svg";
-import SendIcon from "./SendIcon";
+import logoIcon from "./assets/imeddata-logo.svg"; // Ensure this path is correct
+import SendIcon from "./SendIcon"; // Ensure this component exists and path is correct
 
-// --- Icons remain the same ---
+// --- Icon Components (Keep as they are functional) ---
 const DocumentIcon = () => (
   <svg width="24" height="24" viewBox="0 0 24 24" fill="#ff6b35">
     <path d="M14 2H6C4.9 2 4 2.9 4 4V20C4 21.1 4.9 22 6 22H18C19.1 22 20 21.1 20 20V8L14 2ZM16 18H8V16H16V18ZM16 14H8V12H16V14ZM13 9V3.5L18.5 9H13Z" />
   </svg>
 );
-
 const AIIcon = () => (
   <svg width="24" height="24" viewBox="0 0 24 24" fill="#ff6b35">
     <path d="M21 2H3C1.9 2 1 2.9 1 4V16C1 17.1 1.9 18 3 18H7L11 22V18H21C22.1 18 23 17.1 23 16V4C23 2.9 22.1 2 21 2ZM13 11H7V9H13V11ZM17 7H7V5H17V7Z" />
   </svg>
 );
-
 const ImageIcon = () => (
   <svg width="24" height="24" viewBox="0 0 24 24" fill="#ff6b35">
     <path d="M21 19V5C21 3.9 20.1 3 19 3H5C3.9 3 3 3.9 3 5V19C3 20.1 3.9 21 5 21H19C20.1 21 21 20.1 21 19ZM8.5 13.5L11 16.51L14.5 12L19 18H5L8.5 13.5Z" />
@@ -47,25 +45,25 @@ function ChatPage() {
   const [examDates, setExamDates] = useState([]);
   const [selectedExamType, setSelectedExamType] = useState("");
   const [selectedDate, setSelectedDate] = useState("");
-  const [allImages, setAllImages] = useState([]); // This state seems unused, consider removing if not needed
   const [filteredImages, setFilteredImages] = useState([]);
   const [currentPage, setCurrentPage] = useState(0);
   const [isImageViewerVisible, setIsImageViewerVisible] = useState(false);
   const [modalVisible, setModalVisible] = useState(false);
   const [modalImage, setModalImage] = useState("");
 
-  const imagesPerPage = 20;
+  const imagesPerPage = 20; // Configurable number of images per page
 
-  // --- Helper function to add assistant messages ---
+  // --- Helper function to add assistant messages to the chat ---
   const addAssistantMessage = (content, subtext = "") => {
-    // Ensure conversation starts when the assistant speaks first
+    // Ensure conversation starts when the assistant speaks
     if (!isConversationStarted) {
       setIsConversationStarted(true);
     }
+    // Use a functional update to ensure we have the latest state
     setMessages((prevMessages) => [
       ...prevMessages,
       {
-        id: Date.now(),
+        id: Date.now() + Math.random(), // Add random number for potentially faster updates
         sender: "assistant",
         content: content,
         subtext: subtext,
@@ -73,16 +71,20 @@ function ChatPage() {
     ]);
   };
 
-  // Handle user input in chat
+  // --- API Endpoint Base URL (Optional but good practice) ---
+  const API_BASE_URL = "https://api.imeddata-4.com.br";
+
+  // Handle user input change in the chat input field
   const handleMessageChange = (e) => {
-    setMessage(e.target.value);
-    setCharCount(e.target.value.length);
+    const value = e.target.value;
+    setMessage(value);
+    setCharCount(value.length);
   };
 
-  // Send message in chat (User message)
+  // Handle sending a message from the user input
   const handleSendMessage = (e) => {
-    e.preventDefault();
-    if (message.trim() === "") return;
+    e.preventDefault(); // Prevent form submission from reloading the page
+    if (message.trim() === "") return; // Don't send empty messages
 
     const newMessage = {
       id: Date.now(),
@@ -90,151 +92,177 @@ function ChatPage() {
       content: message,
     };
 
-    setMessages([...messages, newMessage]);
-    setMessage("");
+    // Add user message to the chat
+    setMessages((prevMessages) => [...prevMessages, newMessage]);
+    setMessage(""); // Clear input field
     setCharCount(0);
-    setIsConversationStarted(true);
+    setIsConversationStarted(true); // Mark conversation as started
 
-    // --- Simple Echo Bot Example (Replace with actual AI/API call later) ---
-    // Simulate assistant response after a short delay
-    // You would replace this setTimeout with your actual logic
-    // that might involve sending the user message to an API and getting a response
+    // --- IMPORTANT: Placeholder for AI Interaction ---
+    // This simulates a response. Replace this with your actual API call
+    // to an AI service, passing `newMessage.content`.
+    // The response from that AI service should then be added using `addAssistantMessage`.
     setTimeout(() => {
       addAssistantMessage(
-        "Recebi sua mensagem!",
-        `Você disse: "${newMessage.content}". Em breve integrarei com a IA.`
+        "Resposta simulada:", // Replace with actual AI response
+        `Recebi sua mensagem: "${newMessage.content}". A integração real com a IA ainda será implementada.`
       );
     }, 500);
-    // --- End Simple Echo Bot Example ---
+    // --- End Placeholder ---
   };
 
-  // Load user information
+  // Load user name and associated exam types
   const loadUser = async () => {
     if (!userId) {
-      // Use assistant message instead of alert
       addAssistantMessage(
-        "Por favor, insira um ID de usuário no filtro ao lado para carregar as informações."
+        "Por favor, insira um ID de usuário no filtro ao lado."
       );
       return;
     }
 
     setIsLoading(true);
-    setUserInfoVisible(false); // Hide previous info while loading
+    setUserInfoVisible(false); // Hide previous info
+    // Clear dependent data
+    setUserName("");
+    setExamTypes([]);
+    setExamDates([]);
+    setSelectedExamType("");
+    setSelectedDate("");
+    setDocuments([]);
+    setDataTypes([]);
+    setSelectedDataType("");
+    setFilteredImages([]);
+    setIsImageViewerVisible(false);
+
     addAssistantMessage(
       "Carregando informações do usuário...",
       `ID: ${userId}`
     );
 
     try {
-      const response = await fetch(
-        `https://api.imeddata-4.com.br/get-user-name?userId=${userId}`
+      // Fetch user name
+      const userResponse = await fetch(
+        `${API_BASE_URL}/get-user-name?userId=${userId}`
       );
-
-      if (!response.ok) {
-        if (response.status === 404) {
+      if (!userResponse.ok) {
+        if (userResponse.status === 404) {
           throw new Error("Usuário não encontrado. Verifique o ID digitado.");
         }
-        throw new Error(`Erro ${response.status} ao carregar usuário`);
+        throw new Error(
+          `Erro ${userResponse.status} ao buscar nome do usuário.`
+        );
       }
+      const userData = await userResponse.json();
 
-      const data = await response.json();
-
-      if (data.userName) {
-        setUserName(data.userName);
+      if (userData.userName) {
+        setUserName(userData.userName);
         setUserInfoVisible(true);
-        addAssistantMessage(`Usuário ${data.userName} carregado com sucesso.`);
-        // Load exam types automatically after loading user
+        addAssistantMessage(
+          `Usuário '${userData.userName}' carregado com sucesso.`
+        );
+        // Now fetch exam types for this user
         await loadExamTypes(userId); // Pass userId explicitly
       } else {
-        // Handle case where API returns 200 but no userName (unlikely based on previous logic but safe)
-        addAssistantMessage(
-          "Usuário não encontrado.",
-          "Resposta da API não continha nome de usuário."
-        );
-        setUserId(""); // Clear potentially invalid ID
+        addAssistantMessage("Usuário encontrado, mas sem nome associado.");
+        // Optionally still load exam types if needed even without a name
+        await loadExamTypes(userId);
       }
     } catch (error) {
-      console.error("Erro ao carregar usuário:", error);
+      console.error("Erro detalhado ao carregar usuário:", error);
       addAssistantMessage(
-        "Erro ao carregar usuário.",
+        "Erro ao carregar informações do usuário.",
         error.message || "Verifique a conexão ou o ID informado."
       );
-      setUserId(""); // Clear potentially invalid ID
-      setUserInfoVisible(false); // Ensure stale info is hidden
+      // Clear potentially invalid ID and related info
+      setUserId("");
+      setUserName("");
+      setUserInfoVisible(false);
     } finally {
-      setIsLoading(false);
+      setIsLoading(false); // Stop loading indicator
     }
   };
 
-  // Load exam types for the user
+  // Load available exam types for the current user
   const loadExamTypes = async (currentUserId) => {
-    // Accept userId as parameter
-    // No need for separate loading message here as it's part of loadUser flow usually
+    // This function is now primarily called by loadUser,
+    // so the loading indicator is handled there.
+    // We add messages specific to the exam type loading process.
     try {
       const examTypesResponse = await fetch(
-        `https://api.imeddata-4.com.br/get-exam-types?userId=${currentUserId}` // Use passed userId
+        `${API_BASE_URL}/get-exam-types?userId=${currentUserId}`
       );
-
       if (!examTypesResponse.ok) {
-        throw new Error("Erro ao buscar tipos de exames do usuário");
+        throw new Error(
+          `Erro ${examTypesResponse.status} ao buscar tipos de exames.`
+        );
       }
-
       const examTypesData = await examTypesResponse.json();
-      setExamTypes(examTypesData);
-      if (examTypesData.length > 0) {
+
+      setExamTypes(examTypesData || []); // Ensure it's an array
+
+      if (examTypesData && examTypesData.length > 0) {
         addAssistantMessage(
           "Tipos de exame disponíveis carregados.",
-          "Selecione um tipo de exame no filtro."
+          "Selecione um tipo no filtro."
         );
       } else {
         addAssistantMessage(
           "Nenhum tipo de exame encontrado para este usuário."
         );
       }
-      // Reset dependent states
-      setExamDates([]);
-      setSelectedExamType("");
-      setSelectedDate("");
-      setFilteredImages([]);
-      setIsImageViewerVisible(false);
     } catch (error) {
       console.error("Erro ao carregar tipos de exames:", error);
       addAssistantMessage("Erro ao carregar tipos de exames.", error.message);
-      setExamTypes([]); // Clear exam types on error
+      setExamTypes([]); // Clear types on error
     }
+    // Reset downstream selections
+    setExamDates([]);
+    setSelectedExamType("");
+    setSelectedDate("");
+    setFilteredImages([]);
+    setIsImageViewerVisible(false);
   };
 
-  // Load exam dates based on selected exam type
+  // Load exam dates based on the selected exam type
   const loadExamDates = async () => {
-    if (!selectedExamType || !userId) return; // Ensure userId is also available
+    // This is triggered by useEffect when selectedExamType changes,
+    // ensure userId and selectedExamType are present.
+    if (!selectedExamType || !userId) {
+      // Clear existing dates if selection is invalid
+      setExamDates([]);
+      setSelectedDate("");
+      return;
+    }
 
-    setIsLoading(true); // Add loading indicator for this specific action
+    setIsLoading(true); // Indicate loading for this specific action
     addAssistantMessage(`Buscando datas para o exame: ${selectedExamType}`);
+    setExamDates([]); // Clear previous dates
+    setSelectedDate(""); // Reset date selection
+    setFilteredImages([]); // Reset images
+    setIsImageViewerVisible(false); // Hide viewer
 
     try {
       const response = await fetch(
-        `https://api.imeddata-4.com.br/get-exam-dates?userId=${userId}&exam_type=${selectedExamType}`
+        `${API_BASE_URL}/get-exam-dates?userId=${userId}&exam_type=${selectedExamType}`
       );
-
       if (!response.ok) {
-        throw new Error("Erro ao buscar datas de exames");
+        throw new Error(`Erro ${response.status} ao buscar datas de exames.`);
       }
-
       const examDatesData = await response.json();
-      const distinctDates = [...new Set(examDatesData)];
+      // Ensure data is an array and get distinct dates
+      const distinctDates = [
+        ...new Set(Array.isArray(examDatesData) ? examDatesData : []),
+      ];
       setExamDates(distinctDates);
-      setSelectedDate(""); // Reset date selection
-      setFilteredImages([]); // Reset images
-      setIsImageViewerVisible(false); // Hide viewer if dates change
 
       if (distinctDates.length > 0) {
         addAssistantMessage(
-          `Datas disponíveis para ${selectedExamType} carregadas.`,
+          `Datas disponíveis para '${selectedExamType}' carregadas.`,
           "Selecione uma data no filtro."
         );
       } else {
         addAssistantMessage(
-          `Nenhuma data encontrada para o tipo de exame ${selectedExamType}.`
+          `Nenhuma data encontrada para o tipo de exame '${selectedExamType}'.`
         );
       }
     } catch (error) {
@@ -246,22 +274,23 @@ function ChatPage() {
     }
   };
 
-  // Handle document feature (triggered by card click or potentially a command)
+  // Handle activating the Documents feature (e.g., via card click)
   const handleDocumentsFeature = async () => {
     if (!userId) {
       addAssistantMessage(
-        "Para acessar documentos, precisamos do seu ID de usuário.",
-        "Por favor, informe o ID no filtro ao lado e clique em 'Carregar'."
+        "Para acessar documentos, carregue um usuário primeiro.",
+        "Informe o ID no filtro e clique em 'Carregar'."
       );
       return;
     }
 
     setIsLoading(true);
-    setIsImageViewerVisible(false); // Hide image viewer if showing docs
-    setFilteredImages([]); // Clear images
-    setDocuments([]); // Clear previous documents
-    setDataTypes([]); // Clear previous data types
-    setSelectedDataType(""); // Reset data type filter
+    // Clear other potentially active views/data
+    setIsImageViewerVisible(false);
+    setFilteredImages([]);
+    setDocuments([]); // Clear previous documents before fetching
+    setDataTypes([]);
+    setSelectedDataType("");
 
     addAssistantMessage(
       "Buscando documentos...",
@@ -269,52 +298,42 @@ function ChatPage() {
     );
 
     try {
-      let url = `https://api.imeddata-4.com.br/documents/${encodeURIComponent(
-        userId
-      )}`;
-
-      // Note: The filter logic is slightly different now.
-      // We fetch ALL documents first to get the data types, then let the user filter via the dropdown.
-      // If you want to filter directly via API, the dropdown should trigger a *new* fetch.
-      // Let's stick to fetching all first for simplicity based on the current UI.
-
-      // if (selectedDataType) { // This would filter via API if uncommented
-      //   url += `?dataType=${encodeURIComponent(selectedDataType)}`;
-      // }
-
+      const url = `${API_BASE_URL}/documents/${encodeURIComponent(userId)}`;
       const response = await fetch(url);
-
       if (!response.ok) {
         throw new Error(`Erro ${response.status} ao buscar documentos.`);
       }
-
       const data = await response.json();
 
-      // Assuming API returns { success: boolean, documents: [...] }
-      if (!data.success || !data.documents || data.documents.length === 0) {
+      // Check the structure of the response (adjust based on your actual API)
+      if (
+        data.success === false ||
+        !data.documents ||
+        data.documents.length === 0
+      ) {
         addAssistantMessage(
           "Nenhum documento encontrado",
-          `Não encontramos documentos para o usuário ${userName || userId}.`
+          `Não há documentos para ${userName || userId}.`
         );
         setDocuments([]);
         setDataTypes([]);
-        return; // Exit early
+      } else {
+        const fetchedDocs = data.documents;
+        setDocuments(fetchedDocs);
+
+        // Extract unique data types for the filter dropdown
+        const types = [
+          ...new Set(fetchedDocs.map((doc) => doc.data_type).filter(Boolean)),
+        ];
+        setDataTypes(types);
+
+        addAssistantMessage(
+          `Encontrei ${fetchedDocs.length} documento(s).`,
+          types.length > 0
+            ? "Documentos exibidos abaixo. Use o filtro para refinar por tipo."
+            : "Documentos exibidos abaixo."
+        );
       }
-
-      // Extract data types for filtering dropdown
-      const dataTypesSet = new Set();
-      data.documents.forEach((doc) => {
-        if (doc.data_type) {
-          dataTypesSet.add(doc.data_type);
-        }
-      });
-      setDataTypes(Array.from(dataTypesSet));
-      setDocuments(data.documents); // Store all fetched documents
-
-      addAssistantMessage(
-        `Encontrei ${data.documents.length} documento(s).`,
-        "Você pode visualizar os documentos abaixo e filtrar por tipo de dados usando o filtro ao lado."
-      );
     } catch (error) {
       console.error("Erro ao buscar documentos:", error);
       addAssistantMessage("Erro ao buscar documentos.", error.message);
@@ -325,60 +344,64 @@ function ChatPage() {
     }
   };
 
-  // Handle images feature activation (triggered by card click)
+  // Handle activating the Images feature (e.g., via card click)
   const handleImagesFeature = () => {
     if (!userId) {
       addAssistantMessage(
-        "Para acessar imagens, precisamos do seu ID de usuário.",
-        "Por favor, informe o ID no filtro ao lado e clique em 'Carregar'."
+        "Para acessar imagens, carregue um usuário primeiro.",
+        "Informe o ID no filtro e clique em 'Carregar'."
       );
       return;
     }
 
-    if (!examTypes.length) {
+    if (examTypes.length === 0) {
       addAssistantMessage(
-        "Não há tipos de exame carregados para este usuário.",
-        "Carregue as informações do usuário primeiro."
+        "Tipos de exame não carregados.",
+        "Verifique se o usuário possui exames disponíveis."
       );
+      // Optionally trigger loadUser again or just inform
       return;
     }
 
-    setIsImageViewerVisible(true); // Show the section for controls/images
-    setDocuments([]); // Hide documents if switching to images
-    setDataTypes([]); // Clear doc types
+    // Clear document view if switching to images
+    setDocuments([]);
+    setDataTypes([]);
     setSelectedDataType("");
 
+    setIsImageViewerVisible(true); // Show the section for image filters/display
     addAssistantMessage(
       "Visualizador de imagens ativado.",
-      "Selecione um tipo de exame e uma data nos filtros para buscar as imagens."
+      "Selecione tipo e data do exame nos filtros e clique em 'Buscar Imagens'."
     );
   };
 
-  // Handle AI feature card click (Example)
+  // Handle activating the AI feature card (placeholder/welcome)
   const handleAIFeature = () => {
-    setIsConversationStarted(true); // Make sure chat view is active
+    setIsConversationStarted(true); // Ensure chat view is active
     addAssistantMessage(
       "Olá! Sou sua assistente virtual.",
-      "Como posso te ajudar com informações médicas hoje? Você pode me fazer perguntas gerais ou pedir para buscar documentos e imagens usando os filtros e botões."
+      "Use os filtros e botões para buscar dados ou digite sua pergunta."
     );
     // Hide specific viewers if AI is chosen explicitly
     setIsImageViewerVisible(false);
     setDocuments([]);
+    setDataTypes([]);
+    setSelectedDataType("");
   };
 
-  // Filter and load images based on selections (Triggered by "Buscar Imagens" button)
+  // Fetch and filter images based on selected type and date
   const filterAndLoadImages = async () => {
     if (!selectedExamType || !selectedDate) {
       addAssistantMessage(
         "Seleção incompleta.",
-        "Por favor, selecione um tipo de exame e uma data nos filtros."
+        "Escolha o tipo de exame e a data."
       );
-      return; // Don't use alert
+      return;
     }
     if (!userId) {
       addAssistantMessage(
-        "ID do usuário não encontrado.",
-        "Por favor, carregue as informações do usuário primeiro."
+        "ID do usuário não definido.",
+        "Carregue um usuário primeiro."
       );
       return;
     }
@@ -386,6 +409,7 @@ function ChatPage() {
     setIsLoading(true);
     setFilteredImages([]); // Clear previous images
     setCurrentPage(0); // Reset pagination
+    setIsImageViewerVisible(true); // Ensure viewer stays visible
 
     addAssistantMessage(
       "Buscando imagens...",
@@ -393,32 +417,27 @@ function ChatPage() {
     );
 
     try {
-      const response = await fetch(
-        `https://api.imeddata-4.com.br/get-filtered-images?userId=${userId}&exam_type=${encodeURIComponent(
-          selectedExamType
-        )}&date=${selectedDate}`
-      );
-
+      const url = `${API_BASE_URL}/get-filtered-images?userId=${userId}&exam_type=${encodeURIComponent(
+        selectedExamType
+      )}&date=${selectedDate}`;
+      const response = await fetch(url);
       if (!response.ok) {
-        throw new Error(`Erro ${response.status} ao buscar imagens`);
+        throw new Error(`Erro ${response.status} ao buscar imagens.`);
       }
-
       const imagesData = await response.json();
 
-      // Assuming imagesData is an array of objects like { image: base64string, ... }
       if (!imagesData || imagesData.length === 0) {
         addAssistantMessage(
           "Nenhuma imagem encontrada.",
-          `Não há imagens para ${selectedExamType} na data ${selectedDate}.`
+          `Não há imagens para ${selectedExamType} em ${selectedDate}.`
         );
         setFilteredImages([]);
       } else {
-        setFilteredImages(imagesData);
+        setFilteredImages(imagesData); // Assuming imagesData is the array
         addAssistantMessage(
           `${imagesData.length} imagem(ns) encontrada(s).`,
-          "Confira as imagens abaixo. Clique em uma imagem para ampliar."
+          "Imagens exibidas abaixo. Clique para ampliar."
         );
-        setIsImageViewerVisible(true); // Ensure viewer is visible
       }
     } catch (error) {
       console.error("Erro ao buscar imagens:", error);
@@ -429,111 +448,105 @@ function ChatPage() {
     }
   };
 
-  // --- Dummy function for convert button ---
+  // --- Dummy function for PDF conversion button ---
   const convertToHL7FHIR = (pdfBase64) => {
     addAssistantMessage(
-      "Função de conversão ainda não implementada.",
-      "Em breve será possível converter para HL7 FHIR."
+      "Funcionalidade Indisponível",
+      "A conversão de PDF para HL7 FHIR ainda não foi implementada."
     );
-    console.log("Attempting to convert PDF (base64 length):", pdfBase64.length);
-    // In a real scenario, you would make another API call here
-    // POST request to a conversion endpoint with the pdfBase64 data
+    // console.log("Placeholder: Convert PDF to HL7 FHIR. Base64 length:", pdfBase64.length);
+    // Future implementation: Make API call here
   };
 
-  // Navigate to next page of images
+  // --- Pagination Handlers ---
   const nextPage = () => {
-    if ((currentPage + 1) * imagesPerPage < filteredImages.length) {
-      setCurrentPage(currentPage + 1);
-    }
+    setCurrentPage((prev) =>
+      Math.min(prev + 1, Math.ceil(filteredImages.length / imagesPerPage) - 1)
+    );
   };
-
-  // Navigate to previous page of images
   const previousPage = () => {
-    if (currentPage > 0) {
-      setCurrentPage(currentPage - 1);
-    }
+    setCurrentPage((prev) => Math.max(prev - 1, 0));
   };
 
-  // Open image in modal
-  const openModal = (imageSrc) => {
-    setModalImage(imageSrc); // Assuming imageSrc is the base64 string
+  // --- Modal Handlers ---
+  const openModal = (imageBase64) => {
+    setModalImage(imageBase64);
     setModalVisible(true);
   };
-
-  // Close image modal
   const closeModal = () => {
     setModalVisible(false);
-    setModalImage(""); // Clear image data
+    setModalImage(""); // Clear image data from state
   };
 
-  // Effect to scroll to bottom of chat on new messages
+  // --- Effects ---
+
+  // Scroll to bottom of chat when new messages are added
   useEffect(() => {
     if (chatContentRef.current) {
-      // Add a small delay to allow rendering before scrolling
-      setTimeout(() => {
-        chatContentRef.current.scrollTop = chatContentRef.current.scrollHeight;
+      // Delay slightly to allow DOM update before scrolling
+      const timer = setTimeout(() => {
+        if (chatContentRef.current) {
+          chatContentRef.current.scrollTop =
+            chatContentRef.current.scrollHeight;
+        }
       }, 100);
+      return () => clearTimeout(timer); // Cleanup timer on unmount or change
     }
-  }, [messages]); // Trigger scroll on new messages
+  }, [messages]); // Dependency: Run when messages array changes
 
-  // Effect to load exam dates when exam type changes
+  // Load exam dates automatically when the selected exam type changes (and user is loaded)
   useEffect(() => {
-    // Only load dates if a user is loaded and an exam type is selected
     if (selectedExamType && userId) {
       loadExamDates();
-    } else {
-      // Clear dates if exam type is deselected or user is cleared
-      setExamDates([]);
-      setSelectedDate("");
     }
+    // No explicit 'else' needed to clear dates, handled within loadExamDates check
     // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [selectedExamType, userId]); // Rerun when selectedExamType or userId changes
+  }, [selectedExamType, userId]); // Dependencies: Run when type or user changes
 
-  // Effect to filter documents when selectedDataType changes
-  // This filters the *already loaded* documents in the frontend
+  // --- Derived State ---
+  // Filter documents based on selected data type (client-side filtering)
   const displayedDocuments = selectedDataType
     ? documents.filter((doc) => doc.data_type === selectedDataType)
     : documents;
 
+  // Calculate images to display for the current page
+  const displayedImages = filteredImages.slice(
+    currentPage * imagesPerPage,
+    (currentPage + 1) * imagesPerPage
+  );
+
+  // --- JSX Return ---
   return (
     <div className="chat-page">
-      {/* --- Filtros Sidebar remains largely the same --- */}
+      {/* --- Filters Sidebar --- */}
       <div className="filtros-sidebar">
         <h2 className="filtros-title">Filtros</h2>
 
         {/* User ID Input */}
         <div className="filter-section">
-          <label className="filtros-label">Código do usuário</label>
+          <label htmlFor="userIdInput" className="filtros-label">
+            Código do usuário
+          </label>
           <div className="input-with-button">
             <input
+              id="userIdInput"
               type="text"
               className="filtros-input"
               value={userId}
-              onChange={(e) => {
-                setUserId(e.target.value);
-                // Reset dependent states if ID changes manually
-                setUserName("");
-                setUserInfoVisible(false);
-                setExamTypes([]);
-                setExamDates([]);
-                setSelectedExamType("");
-                setSelectedDate("");
-                setDocuments([]);
-                setDataTypes([]);
-                setSelectedDataType("");
-                setFilteredImages([]);
-                setIsImageViewerVisible(false);
-              }}
+              onChange={(e) => setUserId(e.target.value)}
               onKeyDown={(e) => {
-                if (e.key === "Enter") loadUser();
-              }} // Allow Enter key to load
+                if (e.key === "Enter" && userId && !isLoading) loadUser();
+              }}
+              placeholder="Digite o ID"
+              aria-label="Código do usuário"
             />
             <button
               className="filter-action-button"
               onClick={loadUser}
-              disabled={!userId || isLoading} // Disable while loading
+              disabled={!userId || isLoading}
+              aria-live="polite" // Announce changes for screen readers
             >
-              {isLoading && userName === "" ? "Carregando..." : "Carregar"}
+              {isLoading && !userName ? "Carregando..." : "Carregar"}
             </button>
           </div>
         </div>
@@ -545,18 +558,21 @@ function ChatPage() {
           </div>
         )}
 
-        {/* Document Data Type Filter */}
+        {/* Document Type Filter (Only shows if documents are loaded) */}
         {documents.length > 0 && dataTypes.length > 0 && (
           <div className="filter-section">
-            <label className="filtros-label">Filtrar Documento por Tipo</label>
+            <label htmlFor="docTypeFilter" className="filtros-label">
+              Filtrar Documento
+            </label>
             <select
+              id="docTypeFilter"
               className="filtros-select"
               value={selectedDataType}
               onChange={(e) => setSelectedDataType(e.target.value)}
             >
               <option value="">Todos os Tipos</option>
-              {dataTypes.map((type, index) => (
-                <option key={index} value={type}>
+              {dataTypes.map((type) => (
+                <option key={type} value={type}>
                   {type}
                 </option>
               ))}
@@ -564,19 +580,22 @@ function ChatPage() {
           </div>
         )}
 
-        {/* Exam Type Filter */}
+        {/* Exam Type Filter (Only shows if types are loaded) */}
         {examTypes.length > 0 && (
           <div className="filter-section">
-            <label className="filtros-label">Tipo de Exame</label>
+            <label htmlFor="examTypeFilter" className="filtros-label">
+              Tipo de Exame
+            </label>
             <select
+              id="examTypeFilter"
               className="filtros-select"
               value={selectedExamType}
               onChange={(e) => setSelectedExamType(e.target.value)}
-              disabled={isLoading} // Disable while loading user/dates
+              disabled={isLoading}
             >
               <option value="">Selecione o Tipo</option>
-              {examTypes.map((type, index) => (
-                <option key={index} value={type}>
+              {examTypes.map((type) => (
+                <option key={type} value={type}>
                   {type}
                 </option>
               ))}
@@ -584,32 +603,36 @@ function ChatPage() {
           </div>
         )}
 
-        {/* Exam Date Filter */}
+        {/* Exam Date Filter (Only shows if dates are loaded) */}
         {examDates.length > 0 && (
           <div className="filter-section">
-            <label className="filtros-label">Data do Exame</label>
+            <label htmlFor="examDateFilter" className="filtros-label">
+              Data do Exame
+            </label>
             <select
+              id="examDateFilter"
               className="filtros-select"
               value={selectedDate}
               onChange={(e) => setSelectedDate(e.target.value)}
-              disabled={!selectedExamType || isLoading} // Disable if no type selected or loading
+              disabled={!selectedExamType || isLoading}
             >
               <option value="">Selecione a Data</option>
-              {examDates.map((date, index) => (
-                <option key={index} value={date}>
-                  {date} {/* Format date if needed */}
+              {examDates.map((date) => (
+                <option key={date} value={date}>
+                  {date} {/* TODO: Consider formatting date */}
                 </option>
               ))}
             </select>
           </div>
         )}
 
-        {/* Button to trigger image search */}
+        {/* Button to trigger image search (Shows only if type and date selected) */}
         {selectedExamType && selectedDate && (
           <button
             className="filter-action-button"
             onClick={filterAndLoadImages}
-            disabled={isLoading} // Disable while loading images
+            disabled={isLoading}
+            aria-live="polite"
           >
             {isLoading && filteredImages.length === 0
               ? "Buscando..."
@@ -619,85 +642,85 @@ function ChatPage() {
       </div>
       {/* --- End Filtros Sidebar --- */}
 
+      {/* --- Chat Area --- */}
       <div className="chat-container">
-        {/* --- Chat Header remains the same --- */}
+        {/* Chat Header */}
         <div className="chat-header">
           <div className="header-left">
             <div className="logo-small">
-              <img src={logoIcon} alt="Logo" />
+              <img src={logoIcon} alt="iMedidata Logo" />
             </div>
           </div>
           <div className="header-right">
             <div className="user-profile">
               <img
-                src="https://via.placeholder.com/36" // Placeholder, replace if needed
-                alt="User Avatar"
+                src="https://via.placeholder.com/36/ff6b35/ffffff?text=BG" // Placeholder Avatar
+                alt="Avatar do usuário"
                 className="user-avatar"
               />
-              <span>Bruna Gonçalves</span>{" "}
-              {/* Replace with dynamic user if necessary */}
+              <span>Bruna Gonçalves</span> {/* TODO: Make dynamic? */}
             </div>
           </div>
         </div>
-        {/* --- End Chat Header --- */}
+        {/* End Chat Header */}
 
+        {/* Chat Content Area (Scrollable) */}
         <div className="chat-content" ref={chatContentRef}>
           {!isConversationStarted ? (
             <>
-              {/* --- Welcome Screen --- */}
+              {/* Welcome Screen */}
               <div className="welcome-container">
                 <div className="welcome-logo">
-                  <img src={logoIcon} alt="Logo" />
+                  <img src={logoIcon} alt="iMedidata Logo" />
                 </div>
                 <h1 className="welcome-title">Como posso te ajudar hoje?</h1>
                 <p className="welcome-text">
-                  Use os filtros para carregar dados de um usuário ou clique nas
-                  opções abaixo. 😊
+                  Carregue um usuário pelo ID ou clique nas opções.
                 </p>
               </div>
-              {/* --- Feature Cards --- */}
+              {/* Feature Cards */}
               <div className="feature-cards">
                 <div
                   className="feature-card"
-                  onClick={handleDocumentsFeature} // Use specific handler
+                  onClick={handleDocumentsFeature}
+                  role="button"
+                  tabIndex={0}
                 >
                   <div className="feature-icon docs">
                     <DocumentIcon />
                   </div>
                   <h3 className="feature-title">Documentos</h3>
-                  <p className="feature-description">
-                    Buscar e visualizar documentos do usuário carregado
-                  </p>
+                  <p className="feature-description">Buscar documentos</p>
                 </div>
                 <div
                   className="feature-card"
-                  onClick={handleAIFeature} // Use specific handler
+                  onClick={handleAIFeature}
+                  role="button"
+                  tabIndex={0}
                 >
                   <div className="feature-icon ai">
                     <AIIcon />
                   </div>
                   <h3 className="feature-title">Assistente AI</h3>
-                  <p className="feature-description">
-                    Converse com a assistente virtual para tirar dúvidas
-                  </p>
+                  <p className="feature-description">Conversar</p>
                 </div>
                 <div
                   className="feature-card"
-                  onClick={handleImagesFeature} // Use specific handler
+                  onClick={handleImagesFeature}
+                  role="button"
+                  tabIndex={0}
                 >
                   <div className="feature-icon images">
                     <ImageIcon />
                   </div>
                   <h3 className="feature-title">Imagens</h3>
-                  <p className="feature-description">
-                    Ativar visualizador de imagens de exames
-                  </p>
+                  <p className="feature-description">Ver imagens de exames</p>
                 </div>
               </div>
             </>
           ) : (
             <>
-              {/* --- Render Chat Messages --- */}
+              {/* Render Chat Messages */}
               {messages.map((msg) => (
                 <div
                   key={msg.id}
@@ -707,7 +730,11 @@ function ChatPage() {
                 >
                   {msg.sender === "assistant" && (
                     <div className="avatar-container">
-                      <img src={logoIcon} alt="Avatar" className="avatar" />
+                      <img
+                        src={logoIcon}
+                        alt="Assistente Avatar"
+                        className="avatar"
+                      />
                     </div>
                   )}
                   <div
@@ -715,7 +742,6 @@ function ChatPage() {
                       msg.sender === "user" ? "user-content" : ""
                     }`}
                   >
-                    {/* Use different tags or styles if needed, but keep it simple */}
                     <p className="message-main-text">{msg.content}</p>
                     {msg.subtext && (
                       <p className="message-sub-text">{msg.subtext}</p>
@@ -724,47 +750,55 @@ function ChatPage() {
                 </div>
               ))}
 
-              {/* --- Loading Indicator (Inside Chat) --- */}
+              {/* Loading Indicator (Inside Chat) */}
               {isLoading && (
                 <div className="message assistant-message">
                   <div className="avatar-container">
-                    <img src={logoIcon} alt="Avatar" className="avatar" />
+                    <img
+                      src={logoIcon}
+                      alt="Assistente Avatar"
+                      className="avatar"
+                    />
                   </div>
                   <div className="message-content loading-indicator">
                     <div className="loader"></div>
-                    {/* Optional: Add text like "Pensando..." or "Buscando..." */}
                   </div>
                 </div>
               )}
 
-              {/* --- Render Documents (if any and not viewing images) --- */}
+              {/* Render Documents (If available and not viewing images) */}
               {displayedDocuments.length > 0 && !isImageViewerVisible && (
                 <div className="documents-container assistant-message">
                   <div className="avatar-container">
-                    <img src={logoIcon} alt="Avatar" className="avatar" />
+                    <img
+                      src={logoIcon}
+                      alt="Assistente Avatar"
+                      className="avatar"
+                    />
                   </div>
                   <div className="message-content">
-                    <p className="message-main-text">Documentos encontrados:</p>
+                    {/* <p className="message-main-text">Documentos:</p> */}
                     <div className="documents-grid">
                       {displayedDocuments.map((doc, index) => (
-                        <div key={index} className="document-card">
+                        <div
+                          key={doc.document_hash || index}
+                          className="document-card"
+                        >
                           <p className="document-info">
-                            Tipo: {doc.data_type || "N/A"} <br />
-                            {/* Hash: {doc.document_hash} */}
+                            Tipo: {doc.data_type || "N/A"}
                           </p>
                           {doc.pdf_content ? (
                             <>
+                              {/* Consider showing a PDF icon/link instead of iframe for performance */}
                               <iframe
-                                // Use a placeholder or a thumbnail generator if performance is an issue
-                                // Direct rendering of many PDFs can be slow.
-                                // For now, keeping the iframe but maybe with restricted height initially.
                                 src={`data:application/pdf;base64,${doc.pdf_content}`}
-                                className="document-preview" // Style for preview size
-                                title={`Preview ${doc.document_hash}`}
-                                loading="lazy" // Defer loading off-screen previews
+                                className="document-preview"
+                                title={`Preview Doc ${index + 1}`}
+                                loading="lazy"
+                                aria-label={`Preview do documento ${index + 1}`}
                               />
                               <button
-                                className="convert-button" // Keep styling consistent
+                                className="convert-button"
                                 onClick={() =>
                                   convertToHL7FHIR(doc.pdf_content)
                                 }
@@ -774,7 +808,7 @@ function ChatPage() {
                               </button>
                             </>
                           ) : (
-                            <p>Conteúdo do PDF indisponível.</p>
+                            <p>Preview indisponível.</p>
                           )}
                         </div>
                       ))}
@@ -783,37 +817,34 @@ function ChatPage() {
                 </div>
               )}
 
-              {/* --- Render Image Viewer (if active and images available) --- */}
-              {isImageViewerVisible && filteredImages.length > 0 && (
+              {/* Render Image Viewer (If active and images available) */}
+              {isImageViewerVisible && displayedImages.length > 0 && (
                 <div className="image-viewer-container assistant-message">
                   <div className="avatar-container">
-                    <img src={logoIcon} alt="Avatar" className="avatar" />
+                    <img
+                      src={logoIcon}
+                      alt="Assistente Avatar"
+                      className="avatar"
+                    />
                   </div>
                   <div className="message-content">
-                    <p className="message-main-text">Imagens encontradas:</p>
+                    {/* <p className="message-main-text">Imagens:</p> */}
                     <div className="image-viewer">
                       <div className="carousel">
-                        {filteredImages
-                          .slice(
-                            currentPage * imagesPerPage,
-                            (currentPage + 1) * imagesPerPage
-                          )
-                          .map((image, index) => (
-                            <img
-                              key={index}
-                              src={`data:image/jpeg;base64,${image.image}`} // Assuming JPEG, adjust if needed
-                              alt={`Imagem ${
-                                index + 1 + currentPage * imagesPerPage
-                              } de ${selectedExamType || "exame"} em ${
-                                selectedDate || "data"
-                              }`}
-                              className="carousel-image"
-                              onClick={() => openModal(image.image)} // Pass base64 string
-                              loading="lazy" // Defer loading off-screen images
-                            />
-                          ))}
+                        {displayedImages.map((imageInfo, index) => (
+                          <img
+                            key={imageInfo.image_hash || index} // Use a unique key if available
+                            src={`data:image/jpeg;base64,${imageInfo.image}`} // Assume JPEG, adjust if needed
+                            alt={`Imagem ${
+                              index + 1 + currentPage * imagesPerPage
+                            } de ${selectedExamType} em ${selectedDate}`}
+                            className="carousel-image"
+                            onClick={() => openModal(imageInfo.image)}
+                            loading="lazy"
+                          />
+                        ))}
                       </div>
-                      {/* Pagination */}
+                      {/* Pagination Controls */}
                       {filteredImages.length > imagesPerPage && (
                         <div className="pagination-controls">
                           <button
@@ -823,7 +854,7 @@ function ChatPage() {
                             Anterior
                           </button>
                           <span>
-                            Página {currentPage + 1} de{" "}
+                            Página {currentPage + 1} /{" "}
                             {Math.ceil(filteredImages.length / imagesPerPage)}
                           </span>
                           <button
@@ -844,26 +875,31 @@ function ChatPage() {
             </>
           )}
         </div>
+        {/* End Chat Content Area */}
 
-        {/* --- Chat Input Area --- */}
+        {/* Chat Input Area */}
         <div className="chat-input-container">
-          <form onSubmit={handleSendMessage}>
+          <form onSubmit={handleSendMessage} className="chat-input-form">
             <div className="input-wrapper">
               <input
                 type="text"
                 value={message}
                 onChange={handleMessageChange}
-                placeholder="Digite sua mensagem ou use os filtros..." // Updated placeholder
+                placeholder="Digite sua mensagem..."
                 className="chat-input"
                 maxLength={1000}
-                disabled={isLoading} // Optionally disable input while loading
+                disabled={isLoading}
+                aria-label="Digite sua mensagem"
               />
               <div className="input-actions">
-                <span className="char-count">{charCount}/1000</span>
+                <span className="char-count" aria-live="polite">
+                  {charCount}/1000
+                </span>
                 <button
                   type="submit"
                   className="send-button"
-                  disabled={message.trim() === "" || isLoading} // Disable if empty or loading
+                  disabled={message.trim() === "" || isLoading}
+                  aria-label="Enviar mensagem"
                 >
                   <SendIcon />
                 </button>
@@ -871,22 +907,34 @@ function ChatPage() {
             </div>
           </form>
         </div>
-        {/* --- End Chat Input Area --- */}
+        {/* End Chat Input Area */}
       </div>
+      {/* --- End Chat Area --- */}
 
       {/* --- Image Modal --- */}
       {modalVisible && (
-        <div className="modal" onClick={closeModal}>
-          {" "}
-          {/* Close on backdrop click */}
+        // Use role="dialog" and aria-modal="true" for accessibility
+        <div
+          className="modal"
+          onClick={closeModal}
+          role="dialog"
+          aria-modal="true"
+          aria-labelledby="modalTitle"
+        >
           <div className="modal-content" onClick={(e) => e.stopPropagation()}>
-            {" "}
-            {/* Prevent closing when clicking image */}
-            <span className="close-button" onClick={closeModal}>
+            <h2 id="modalTitle" className="visually-hidden">
+              Imagem Ampliada
+            </h2>{" "}
+            {/* Hidden title for screen readers */}
+            <button
+              className="close-button"
+              onClick={closeModal}
+              aria-label="Fechar modal"
+            >
               ×
-            </span>
+            </button>
             <img
-              src={`data:image/jpeg;base64,${modalImage}`} // Assuming JPEG
+              src={`data:image/jpeg;base64,${modalImage}`} // Assume JPEG
               alt="Imagem ampliada"
               className="modal-image"
             />
