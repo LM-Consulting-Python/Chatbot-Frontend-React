@@ -285,59 +285,6 @@ function ChatPage() {
     }
   };
 
-  // Convert document to HL7 FHIR
-  const convertToHL7FHIR = async (pdfContent) => {
-    setIsLoading(true);
-
-    try {
-      const response = await fetch(
-        "https://api.imeddata-4.com.br/convert-pdf-to-hl7",
-        {
-          method: "POST",
-          headers: {
-            "Content-Type": "application/json",
-          },
-          body: JSON.stringify({ pdfContent }),
-        }
-      );
-
-      if (!response.ok) {
-        throw new Error("Erro ao converter para HL7 FHIR.");
-      }
-
-      // Handle streaming response
-      const reader = response.body.getReader();
-      const decoder = new TextDecoder("utf-8");
-      let result = "";
-
-      while (true) {
-        const { done, value } = await reader.read();
-        if (done) break;
-        result += decoder.decode(value, { stream: true });
-      }
-
-      // Send the converted result to the chat
-      const assistantResponse = {
-        id: Date.now() + 1,
-        sender: "assistant",
-        content: "Documento convertido para HL7 FHIR",
-        subtext: result,
-      };
-      setMessages((prevMessages) => [...prevMessages, assistantResponse]);
-    } catch (error) {
-      console.error("Erro ao converter para HL7 FHIR:", error);
-      const assistantResponse = {
-        id: Date.now() + 1,
-        sender: "assistant",
-        content: "Erro ao converter documento",
-        subtext: error.message,
-      };
-      setMessages((prevMessages) => [...prevMessages, assistantResponse]);
-    } finally {
-      setIsLoading(false);
-    }
-  };
-
   // Handle images feature
   const handleImagesFeature = () => {
     if (!userId) {
