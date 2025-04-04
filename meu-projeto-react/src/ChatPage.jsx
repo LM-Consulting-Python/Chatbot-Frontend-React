@@ -76,54 +76,6 @@ function ChatPage() {
     setMessage("");
     setCharCount(0);
     setIsConversationStarted(true);
-
-    // Simulate AI response
-    setTimeout(() => {
-      const assistantResponse = {
-        id: Date.now() + 1,
-        sender: "assistant",
-        content: "Entendi sua mensagem",
-        subtext:
-          "Estou processando sua solicitação e retornarei em breve com mais informações.",
-      };
-      setMessages((prevMessages) => [...prevMessages, assistantResponse]);
-    }, 1000);
-  };
-
-  // Start a feature-based conversation
-  const startFeatureConversation = (feature) => {
-    setIsConversationStarted(true);
-    const featureMessages = {
-      documents: "Quero ver os documentos disponíveis",
-      ai: "Preciso de ajuda da assistente virtual",
-      images: "Quero acessar as imagens",
-    };
-
-    const newMessage = {
-      id: Date.now(),
-      sender: "user",
-      content: featureMessages[feature],
-    };
-
-    setMessages([newMessage]);
-
-    // Handle specific feature selection
-    if (feature === "documents") {
-      handleDocumentsFeature();
-    } else if (feature === "images") {
-      handleImagesFeature();
-    }
-
-    // Simulate AI response
-    setTimeout(() => {
-      const assistantResponse = {
-        id: Date.now() + 1,
-        sender: "assistant",
-        content: `Você selecionou a opção ${feature}`,
-        subtext: "Como posso ajudar com isso?",
-      };
-      setMessages((prevMessages) => [...prevMessages, assistantResponse]);
-    }, 1000);
   };
 
   // Load user information
