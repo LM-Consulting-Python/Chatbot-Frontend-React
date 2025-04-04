@@ -62,39 +62,51 @@ function ChatPage() {
     if (!isConversationStarted) {
       setIsConversationStarted(true);
     }
+    setMessages((prevMessages) => [
+      ...prevMessages,
+      {
+        id: Date.now(),
+        sender: "assistant",
+        content: content,
+        subtext: subtext,
+      },
+    ]);
   };
-  setMessages((prevMessages) => [
-    ...prevMessages,
-    {
+
+  // Handle user input in chat
+  const handleMessageChange = (e) => {
+    setMessage(e.target.value);
+    setCharCount(e.target.value.length);
+  };
+
+  // Send message in chat (User message)
+  const handleSendMessage = (e) => {
+    e.preventDefault();
+    if (message.trim() === "") return;
+
+    const newMessage = {
       id: Date.now(),
-      sender: "assistant",
-      content: content,
-      subtext: subtext,
-    },
-  ]);
-}
+      sender: "user",
+      content: message,
+    };
 
-// Handle user input in chat
-const handleMessageChange = (e) => {
-  setMessage(e.target.value);
-  setCharCount(e.target.value.length);
-};
+    setMessages([...messages, newMessage]);
+    setMessage("");
+    setCharCount(0);
+    setIsConversationStarted(true);
 
-// Send message in chat (User message)
-const handleSendMessage = (e) => {
-  e.preventDefault();
-  if (message.trim() === "") return;
-
-  const newMessage = {
-    id: Date.now(),
-    sender: "user",
-    content: message,
+    // --- Simple Echo Bot Example (Replace with actual AI/API call later) ---
+    // Simulate assistant response after a short delay
+    // You would replace this setTimeout with your actual logic
+    // that might involve sending the user message to an API and getting a response
+    setTimeout(() => {
+      addAssistantMessage(
+        "Recebi sua mensagem!",
+        `Você disse: "${newMessage.content}". Em breve integrarei com a IA.`
+      );
+    }, 500);
+    // --- End Simple Echo Bot Example ---
   };
-
-  setMessages([...messages, newMessage]);
-  setMessage("");
-  setCharCount(0);
-  setIsConversationStarted(true);
 
   // Load user information
   const loadUser = async () => {
@@ -415,6 +427,17 @@ const handleSendMessage = (e) => {
     } finally {
       setIsLoading(false);
     }
+  };
+
+  // --- Dummy function for convert button ---
+  const convertToHL7FHIR = (pdfBase64) => {
+    addAssistantMessage(
+      "Função de conversão ainda não implementada.",
+      "Em breve será possível converter para HL7 FHIR."
+    );
+    console.log("Attempting to convert PDF (base64 length):", pdfBase64.length);
+    // In a real scenario, you would make another API call here
+    // POST request to a conversion endpoint with the pdfBase64 data
   };
 
   // Navigate to next page of images
@@ -873,6 +896,6 @@ const handleSendMessage = (e) => {
       {/* --- End Image Modal --- */}
     </div>
   );
-};
+}
 
 export default ChatPage;
